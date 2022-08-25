@@ -1,0 +1,25 @@
+{
+  "name": "subgraph-build-checker",
+  "version": "1.0.0",
+  "description": "This action is used to check the build of subgraphs with relevant code changes from Messari subgraphs repository",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build src/action.js -o dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steegecs/Subgraph-Build-Checker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steegecs/Subgraph-Build-Checker/issues"
+  },
+  "homepage": "https://github.com/steegecs/Subgraph-Build-Checker#readme",
+  "dependencies": {
+    "@actions/core": "^1.8.2",
+    "@actions/github": "^5.0.3",
+    "@vercel/ncc": "^0.33.4"
+  }
+}
