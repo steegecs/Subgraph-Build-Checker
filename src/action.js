@@ -1,25 +1,18 @@
 const core = require('@actions/core')
-const github = require('@actions/github')
 const DefaultMap = require('./DefaultMap');
 const { runCommands } = require('./execute');
 
-const HOSTED_SERVICE_ACCESS_TOKEN = core.getInput('HOSTED_SERVICE_ACCESS_TOKEN')
 const CHANGED_FILES = core.getInput('CHANGED_FILES').split(" ")
 const ABSOLUTE_PATH = core.getInput('ABSOLUTE_PATH')
 const GRAPH_DEPLOYMENT_LOCATION = core.getInput('GRAPH_DEPLOYMENT_LOCATION')
 
 const DEPLOYMENT_CONFIGURATIONS_JSON = require(ABSOLUTE_PATH + "/deployment/deployment.json");
-const DEPLOYMENT_CONFIGURATIONS = JSON.parse(JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON))[
-    "subgraphs"
-  ];
+const DEPLOYMENT_CONFIGURATIONS = JSON.parse(JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON));
 
-async function deploySubgraphs(HOSTED_SERVICE_ACCESS_TOKEN, CHANGED_FILES, ABSOLUTE_PATH, GRAPH_DEPLOYMENT_LOCATION, DEPLOYMENT_CONFIGURATIONS) {
+async function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, GRAPH_DEPLOYMENT_LOCATION, DEPLOYMENT_CONFIGURATIONS) {
     let deployAny = 0
 
-    let deployDirectory = new Set()
     let deployProtocol = new DefaultMap(() => new Set());
-    let deployNetwork = new DefaultMap(() => new DefaultMap(() => new Set()));
-
     let deployDirectoryNotSpecified = new Set()
 
     // Iterate through all changed files
@@ -29,25 +22,28 @@ async function deploySubgraphs(HOSTED_SERVICE_ACCESS_TOKEN, CHANGED_FILES, ABSOL
         if (CHANGED_FILES[i].includes("subgraphs/")) {
 
             let subgraphDir = CHANGED_FILES[i].split('subgraphs/')[1].split('/')[0]
-            if (CHANGED_FILES[i].includes("/src/")) {
 
+            if (CHANGED_FILES[i].includes("/src/")) {
                 let refFolder = CHANGED_FILES[i].split('/src/')[0].split('/').reverse()[1]
+
                 // If src code is in common code folder for the directory
                 if (refFolder.includes('subgraphs')) {
-                    if (subgraphDir in DEPLOYMENT_CONFIGURATIONS == false){
+                    let dirPresent = false
+                    for (const [protocol, protocolData] of Object.entries(DEPLOYMENT_CONFIGURATIONS)) {
+                        if (protocolData["base"] == subgraphDir) {
+                            deployProtocol.get(subgraphDir).add(protocolData['protocol']);
+                            dirPresent = true
+                            deployAny=1
+                        }
+                    }
+
+                    if (!dirPresent) {
                         deployDirectoryNotSpecified.add(subgraphDir)
-                    } else {
-                        deployDirectory.add(subgraphDir)
-                        deployAny=1
                     }
                 } else if (refFolder.includes('protocols')) {
-                    if (subgraphDir in DEPLOYMENT_CONFIGURATIONS == false){
-                        deployDirectoryNotSpecified.add(subgraphDir)
-                    } else {
-                        protocol = CHANGED_FILES[i].split('/src/')[0].split('/').reverse()[0]
-                        deployProtocol.get(subgraphDir).add(protocol)
-                        deployAny=1
-                    }
+                    protocol = CHANGED_FILES[i].split('/src/')[0].split('/').reverse()[0]
+                    deployProtocol.get(subgraphDir).add(protocol)
+                    deployAny=1
                 }
             } else if (CHANGED_FILES[i].includes("/config/")) {
 
@@ -57,15 +53,9 @@ async function deploySubgraphs(HOSTED_SERVICE_ACCESS_TOKEN, CHANGED_FILES, ABSOL
                     let refFolder2 = CHANGED_FILES[i].split('/config/')[1].split('/')[0]
 
                     if (refFolder2.includes('networks')) {
-                        if (subgraphDir in DEPLOYMENT_CONFIGURATIONS == false){
-                            deployDirectoryNotSpecified.add(subgraphDir)
-                        } else {
-                            let protocol = CHANGED_FILES[i].split('/config/')[0].split('/').reverse()[0]
-                            let network = CHANGED_FILES[i].split('/config/')[1].split('/')[1]
-
-                            deployNetwork.get(subgraphDir).get(protocol).add(network)
-                            deployAny=1
-                        }
+                        let protocol = CHANGED_FILES[i].split('/config/')[0].split('/').reverse()[0]
+                        deployProtocol.get(subgraphDir).add(protocol)
+                        deployAny=1
                     }
                 } else {
                     console.log("Warning: config/ folder should be located at subgraphs/**subgraph**/protocols/config/")
@@ -83,54 +73,25 @@ async function deploySubgraphs(HOSTED_SERVICE_ACCESS_TOKEN, CHANGED_FILES, ABSOL
         scripts.push('npm install --dev @graphprotocol/graph-ts')
         scripts.push('npm install mustache')
         scripts.push('npm install minimist')
-        scripts.push('graph auth --product hosted-service ' + HOSTED_SERVICE_ACCESS_TOKEN)
         let dependenciesLength = scripts.length
+
+        let directoriesNotSpecified = []
 
         let directories = []
         let protocols = []
-        let networks = []
-
-        let directoriesNotSpecified = []
 
         directoriesNotSpecified = Array.from(deployDirectoryNotSpecified)
         for (let i = 0; i < directoriesNotSpecified.length; i++) {
             console.log("Warning: " + directoriesNotSpecified[i] + " directory is not specified in the deployment configurations\n")
         }
 
-        // Deploy directories if relevant
-        directories = Array.from(deployDirectory);
-        for (let i = 0; i < directories.length; i++) {
-            let path = ABSOLUTE_PATH + '/subgraphs/' + directories[i]
-            scripts.push('npm --prefix ' + path + ' run -s deploy --SUBGRAPH=' + directories[i] + ' --LOCATION=' + GRAPH_DEPLOYMENT_LOCATION + ' --PRINTLOGS=true' + ' --MERGE=true' + ' --TYPE=build')
-        }
-
         // Deploy protocols if relevant
         directories = [...deployProtocol.keys()]
         for (let i = 0; i < directories.length; i++) {
-
             protocols = Array.from(deployProtocol.get(directories[i]));
             for (let j = 0; j < protocols.length; j++) {
-                if (deployDirectory.has(directories[i]) == false) {
-                    let path = ABSOLUTE_PATH + '/subgraphs/' + directories[i]
-                    scripts.push('npm --prefix ' + path + ' run -s deploy --SUBGRAPH=' + directories[i] + ' --PROTOCOL=' +  protocols[j] + ' --LOCATION=' + GRAPH_DEPLOYMENT_LOCATION + ' --PRINTLOGS=true' + ' --MERGE=true' + ' --TYPE=build')
-                }
-            }
-        }
-
-        // Deploy protocol/networks if relevant
-        directories = [...deployNetwork.keys()];
-        for (let i = 0; i < directories.length; i++) {
-            protocols = [...deployNetwork.get(directories[i]).keys()];
-            for (let j = 0; j < protocols.length; j++) {
-                networks = Array.from(deployNetwork.get(directories[i]).get(protocols[j]));
-                for (let k = 0; k < networks.length; k++) {
-                    if (deployDirectory.has(directories[i]) == false) {
-                        if (deployProtocol.has(directories[i]) == false | (deployProtocol.has(directories[i]) == true & deployProtocol.get(directories[i]).has(protocols[j]) == false)) {
-                            let path = ABSOLUTE_PATH + '/subgraphs/' + directories[i]
-                            scripts.push('npm --prefix ' + path + ' run -s deploy --SUBGRAPH=' + directories[i] + ' --PROTOCOL=' + protocols[j] + ' --NETWORK=' + networks[k] + ' --LOCATION=' + GRAPH_DEPLOYMENT_LOCATION + ' --PRINTLOGS=true' + ' --MERGE=true' + ' --TYPE=build')
-                        }
-                    }
-                }
+                let path = ABSOLUTE_PATH + '/subgraphs/' + directories[i]
+                scripts.push('npm --prefix ' + path + ' run -s build --ID=' + protocols[j] + " --SPAN=protocol" + ' --DEPLOY=false' + ' --PRINTLOGS=true')
             }
         }
 
@@ -140,4 +101,4 @@ async function deploySubgraphs(HOSTED_SERVICE_ACCESS_TOKEN, CHANGED_FILES, ABSOL
     }
 }
 
-deploySubgraphs(HOSTED_SERVICE_ACCESS_TOKEN, CHANGED_FILES, ABSOLUTE_PATH, GRAPH_DEPLOYMENT_LOCATION, DEPLOYMENT_CONFIGURATIONS);
+deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, GRAPH_DEPLOYMENT_LOCATION, DEPLOYMENT_CONFIGURATIONS);
