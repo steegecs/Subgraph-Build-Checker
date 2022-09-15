@@ -44,6 +44,9 @@ export async function runCommands(array, dependenciesLength, callback) {
             if (deployments.includes("Deployment Failed:")) {
                 core.setFailed("One or more deployments failed");
             }
+            if (deployments.includes("Build Failed:")) {
+                core.setFailed("One or more builds failed");
+            }
             if (deployments == "") {
                 core.setFailed("Error in execution of deployments. See logs below. If empty post an issue in the Messari repo.");
             }
