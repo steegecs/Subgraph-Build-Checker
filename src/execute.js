@@ -1,19 +1,21 @@
-import { exec } from 'child_process';
-const core = require('@actions/core')
-const fs = require('fs');
+import { exec } from "child_process";
+
+const core = require("@actions/core")
 
 /**
  * @param {string[]} array - Protocol that is being deployed
  * @param {string} callback 
 */
-export async function runCommands(array, dependenciesLength, callback) {
+async function runCommands(array, dependenciesLength, callback) {
 
-    var index = 0;
-    var deploymentResults = "";
+    let index = 0;
+    let deploymentResults = "";
 
     function next() {
         if (index < array.length) {
-            exec(array[index++], function(error, stdout, stderr) {
+            exec(array[index], (error, stdout) => {
+            
+            index += 1;
             // console.log('stdout: ' + stdout);
             // console.log('stderr: ' + stderr);
             if (error !== null) {
@@ -28,16 +30,16 @@ export async function runCommands(array, dependenciesLength, callback) {
             next();
            });
        } else {
-            let deploymentResultsList = deploymentResults.split("\n")
+            const deploymentResultsList = deploymentResults.split("\n")
             let deployments = ""
             let deploymentResultsFlag = false
-            for (let i = 0; i < deploymentResultsList.length; i++) {
-                if (deploymentResultsList[i].includes("RESULTS:")) {
+            for (const deploymentResult of deploymentResultsList) {
+                if (deploymentResult.includes("RESULTS:")) {
                     deploymentResultsFlag = true
-                } else if (deploymentResultsList[i].includes("END")) {
+                } else if (deploymentResult.includes("END")) {
                     deploymentResultsFlag = false
                 } else if (deploymentResultsFlag) {
-                    deployments += deploymentResultsList[i] + "\n"
+                    deployments += `${deploymentResult  }\n`
                 }
             }
 
@@ -47,10 +49,10 @@ export async function runCommands(array, dependenciesLength, callback) {
             if (deployments.includes("Build Failed:")) {
                 core.setFailed("One or more builds failed");
             }
-            if (deployments == "") {
+            if (deployments === "") {
                 core.setFailed("Error in execution of deployments. See logs below. If empty post an issue in the Messari repo.");
             }
-            console.log("\nRESULTS:\n" + deployments + "END\n")
+            console.log(`\nRESULTS:\n${  deployments  }END\n`)
             console.log(deploymentResults)
             callback();
        }
@@ -58,3 +60,5 @@ export async function runCommands(array, dependenciesLength, callback) {
     // start the first iteration
     next();
 }
+
+export default runCommands

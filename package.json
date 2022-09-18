@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "ncc build src/action.js -o dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "prettier --loglevel silent --write \"**/*.{md,jsx,tsx,ts,json,html,css,js,yml}\"",
+    "prettier-check": "prettier --loglevel silent --write --check \"**/*.{md,jsx,tsx,ts,json,html,css,js,yml}\"",
+    "lint:fix": "npx eslint --fix --max-warnings 0",
+    "lint": "npx eslint"
   },
   "repository": {
     "type": "git",
@@ -21,5 +25,17 @@
     "@actions/core": "^1.8.2",
     "@actions/github": "^5.0.3",
     "@vercel/ncc": "^0.33.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix",
+    "*.{ts,css,md}": "prettier --write"
   }
 }

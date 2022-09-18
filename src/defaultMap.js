@@ -2,8 +2,8 @@ module.exports = class DefaultMap extends Map {
     constructor(getDefaultValue, ...mapConstructorArgs) {
       super(mapConstructorArgs);
   
-      if (typeof getDefaultValue !== 'function') {
-        throw new Error('getDefaultValue must be a function');
+      if (typeof getDefaultValue !== "function") {
+        throw new Error("getDefaultValue must be a function");
       }
   
       this.getDefaultValue = getDefaultValue;
