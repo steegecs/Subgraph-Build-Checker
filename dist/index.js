@@ -2777,7 +2777,7 @@ async function runCommands(array, dependenciesLength, callback) {
   next();
 }
 
-/* harmony default export */ const execute = (runCommands);
+/* harmony default export */ const execute = (runCommands());
 
 
 /***/ }),

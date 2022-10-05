@@ -61,4 +61,4 @@ async function runCommands(array, dependenciesLength, callback) {
   next();
 }
 
-export default runCommands;
+export default runCommands();
