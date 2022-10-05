@@ -10,10 +10,15 @@ const DEPLOYMENT_CONFIGURATIONS = JSON.parse(
   JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON)
 );
 
+// Some protocols have logs that are to extensive to print out in the github action
+// Temporarily fix this by suppressing logs for these protocols
+const doNotPrintProtocols = new Set(['beefy-finance']);
+
 async function deploySubgraphs(
   CHANGED_FILES,
   ABSOLUTE_PATH,
-  DEPLOYMENT_CONFIGURATIONS
+  DEPLOYMENT_CONFIGURATIONS,
+  doNotPrintProtocols
 ) {
   let deployAny = 0;
 
@@ -95,9 +100,15 @@ async function deploySubgraphs(
       protocols = Array.from(deployProtocol.get(directory));
       for (const protocol of protocols) {
         const path = `${ABSOLUTE_PATH}/subgraphs/${directory}`;
-        scripts.push(
-          `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=true`
-        );
+        if (!doNotPrintProtocols.has(protocol)) {
+          scripts.push(
+            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=false`
+          );
+        } else {
+          scripts.push(
+            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=true`
+          );
+        }
       }
     }
 
@@ -107,4 +118,4 @@ async function deploySubgraphs(
   }
 }
 
-deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS);
+deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS, doNotPrintProtocols);
