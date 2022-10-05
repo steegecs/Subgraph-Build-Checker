@@ -6,7 +6,7 @@ const core = require("@actions/core");
  * @param {string[]} array - Protocol that is being deployed
  * @param {string} callback
  */
-async function runCommands(array, dependenciesLength, callback) {
+export async function runCommands(array, dependenciesLength, callback) {
   let index = 0;
   let deploymentResults = "";
 
@@ -60,5 +60,3 @@ async function runCommands(array, dependenciesLength, callback) {
   // start the first iteration
   next();
 }
-
-export default runCommands();

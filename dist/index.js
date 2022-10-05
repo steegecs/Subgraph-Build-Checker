@@ -2708,7 +2708,7 @@ __nccwpck_require__.r(__webpack_exports__);
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ execute)
+  "runCommands": () => (/* binding */ runCommands)
 });
 
 ;// CONCATENATED MODULE: external "child_process"
@@ -2776,8 +2776,6 @@ async function runCommands(array, dependenciesLength, callback) {
   // start the first iteration
   next();
 }
-
-/* harmony default export */ const execute = (runCommands());
 
 
 /***/ }),
