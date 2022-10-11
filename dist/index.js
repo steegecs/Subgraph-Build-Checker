@@ -2728,12 +2728,12 @@ async function runCommands(array, dependenciesLength, callback) {
 
   function next() {
     if (index < array.length) {
-      (0,external_child_process_namespaceObject.exec)(array[index], (error, stdout) => {
+      (0,external_child_process_namespaceObject.exec)(array[index], (stdout, stderr, error) => {
         index += 1;
-        // console.log('stdout: ' + stdout);
-        // console.log('stderr: ' + stderr);
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
         if (error !== null) {
-          // console.log('exec error: ' + error);
+          console.log('exec error: ' + error);
           index = array.length;
         }
         // do the next iteration
@@ -3015,8 +3015,10 @@ async function deploySubgraphs(
   if (deployAny === 1) {
     scripts.push("npm install -g @graphprotocol/graph-cli");
     scripts.push("npm install --dev @graphprotocol/graph-ts");
-    scripts.push("npm install mustache");
-    scripts.push("npm install minimist");
+    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install -g ./`);
+    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install`);
+    scripts.push("npm install -g mustache");
+
     const dependenciesLength = scripts.length;
 
     let directoriesNotSpecified = [];
@@ -3039,11 +3041,11 @@ async function deploySubgraphs(
         const path = `${ABSOLUTE_PATH}/subgraphs/${directory}`;
         if (doNotPrintProtocols.has(protocol)) {
           scripts.push(
-            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=false`
+            `messari build ${protocol}`
           );
         } else {
           scripts.push(
-            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=true`
+            `messari build ${protocol} -l`
           );
           }
       }

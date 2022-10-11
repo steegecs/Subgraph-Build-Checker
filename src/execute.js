@@ -12,12 +12,13 @@ export async function runCommands(array, dependenciesLength, callback) {
 
   function next() {
     if (index < array.length) {
-      exec(array[index], (error, stdout) => {
+      exec(array[index], (stdout, stderr, error) => {
+        console.log("SCRIPT: " + array[index])
         index += 1;
-        // console.log('stdout: ' + stdout);
-        // console.log('stderr: ' + stderr);
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
         if (error !== null) {
-          // console.log('exec error: ' + error);
+          console.log('exec error: ' + error);
           index = array.length;
         }
         // do the next iteration
