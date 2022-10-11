@@ -2729,6 +2729,7 @@ async function runCommands(array, dependenciesLength, callback) {
   function next() {
     if (index < array.length) {
       (0,external_child_process_namespaceObject.exec)(array[index], (stdout, stderr, error) => {
+        console.log("SCRIPT: " + array[index])
         index += 1;
         console.log('stdout: ' + stdout);
         console.log('stderr: ' + stderr);
@@ -3015,9 +3016,6 @@ async function deploySubgraphs(
   if (deployAny === 1) {
     scripts.push("npm install -g @graphprotocol/graph-cli");
     scripts.push("npm install --dev @graphprotocol/graph-ts");
-    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install -g ./`);
-    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install`);
-    scripts.push("npm install -g mustache");
 
     const dependenciesLength = scripts.length;
 
@@ -3039,15 +3037,15 @@ async function deploySubgraphs(
       protocols = Array.from(deployProtocol.get(directory));
       for (const protocol of protocols) {
         const path = `${ABSOLUTE_PATH}/subgraphs/${directory}`;
-        if (doNotPrintProtocols.has(protocol)) {
-          scripts.push(
-            `messari build ${protocol}`
-          );
-        } else {
-          scripts.push(
-            `messari build ${protocol} -l`
-          );
-          }
+        // if (doNotPrintProtocols.has(protocol)) {
+        //   scripts.push(
+        //     `messari build ${protocol}`
+        //   );
+        // } else {
+        //   scripts.push(
+        //     `messari build ${protocol} -l`
+        //   );
+        // }
       }
     }
 
