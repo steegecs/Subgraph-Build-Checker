@@ -3015,7 +3015,7 @@ async function deploySubgraphs(
   if (deployAny === 1) {
     scripts.push("npm install -g @graphprotocol/graph-cli");
     scripts.push("npm install --dev @graphprotocol/graph-ts");
-    scripts.push(`npm --prefix install -g ${ABSOLUTE_PATH}/messari-cli`);
+    scripts.push(`npm install -g ${ABSOLUTE_PATH}/messari-cli`);
     scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install`);
     scripts.push("npm install mustache");
 
