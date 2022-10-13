@@ -214,9 +214,9 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
             path = "".concat(ABSOLUTE_PATH, "/subgraphs/").concat(directory);
 
             if (doNotPrintProtocols.has(protocol)) {
-              scripts.push("npm --prefix ".concat(path, " run -s build --ID=").concat(protocol, " --SPAN=protocol --DEPLOY=false --PRINTLOGS=false"));
+              scripts.push("messari build ".concat(protocol));
             } else {
-              scripts.push("npm --prefix ".concat(path, " run -s build --ID=").concat(protocol, " --SPAN=protocol --DEPLOY=false --PRINTLOGS=true"));
+              scripts.push("messari build ".concat(protocol, " -l"));
             }
           }
 

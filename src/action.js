@@ -103,13 +103,13 @@ async function deploySubgraphs(
         const path = `${ABSOLUTE_PATH}/subgraphs/${directory}`;
         if (doNotPrintProtocols.has(protocol)) {
           scripts.push(
-            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=false`
+            `messari build ${protocol}`
           );
         } else {
           scripts.push(
-            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=true`
+            `messari build ${protocol} -l`
           );
-          }
+        }
       }
     }
 
