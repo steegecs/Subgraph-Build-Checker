@@ -128,17 +128,15 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
           scripts = [];
 
           if (!(deployAny === 1)) {
-            _context.next = 103;
+            _context.next = 101;
             break;
           }
 
           scripts.push("npm install -g @graphprotocol/graph-cli");
           scripts.push("npm install --dev @graphprotocol/graph-ts");
-          scripts.push("npm --prefix ".concat(ABSOLUTE_PATH, "/messari-cli install -g ./"));
+          scripts.push("npm --prefix install -g ".concat(ABSOLUTE_PATH, "/messari-cli"));
           scripts.push("npm --prefix ".concat(ABSOLUTE_PATH, "/messari-cli install"));
           scripts.push("npm install mustache");
-          scripts.push("npm install minimist");
-          scripts.push("npm install -g ./");
           dependenciesLength = scripts.length;
           directoriesNotSpecified = [];
           directories = [];
@@ -147,7 +145,7 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
           _iteratorNormalCompletion2 = true;
           _didIteratorError2 = false;
           _iteratorError2 = undefined;
-          _context.prev = 39;
+          _context.prev = 37;
 
           for (_iterator2 = directoriesNotSpecified[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             directoryNotSpecified = _step2.value;
@@ -155,50 +153,50 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
           } // Deploy protocols if relevant
 
 
-          _context.next = 47;
+          _context.next = 45;
           break;
 
-        case 43:
-          _context.prev = 43;
-          _context.t1 = _context["catch"](39);
+        case 41:
+          _context.prev = 41;
+          _context.t1 = _context["catch"](37);
           _didIteratorError2 = true;
           _iteratorError2 = _context.t1;
 
-        case 47:
-          _context.prev = 47;
-          _context.prev = 48;
+        case 45:
+          _context.prev = 45;
+          _context.prev = 46;
 
           if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
             _iterator2["return"]();
           }
 
-        case 50:
-          _context.prev = 50;
+        case 48:
+          _context.prev = 48;
 
           if (!_didIteratorError2) {
-            _context.next = 53;
+            _context.next = 51;
             break;
           }
 
           throw _iteratorError2;
 
+        case 51:
+          return _context.finish(48);
+
+        case 52:
+          return _context.finish(45);
+
         case 53:
-          return _context.finish(50);
-
-        case 54:
-          return _context.finish(47);
-
-        case 55:
           directories = _toConsumableArray(deployProtocol.keys());
           _iteratorNormalCompletion3 = true;
           _didIteratorError3 = false;
           _iteratorError3 = undefined;
-          _context.prev = 59;
+          _context.prev = 57;
           _iterator3 = directories[Symbol.iterator]();
 
-        case 61:
+        case 59:
           if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
-            _context.next = 86;
+            _context.next = 84;
             break;
           }
 
@@ -207,7 +205,7 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
           _iteratorNormalCompletion4 = true;
           _didIteratorError4 = false;
           _iteratorError4 = undefined;
-          _context.prev = 67;
+          _context.prev = 65;
 
           for (_iterator4 = protocols[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             protocol = _step4.value;
@@ -220,89 +218,89 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
             }
           }
 
-          _context.next = 75;
+          _context.next = 73;
           break;
 
-        case 71:
-          _context.prev = 71;
-          _context.t2 = _context["catch"](67);
+        case 69:
+          _context.prev = 69;
+          _context.t2 = _context["catch"](65);
           _didIteratorError4 = true;
           _iteratorError4 = _context.t2;
 
-        case 75:
-          _context.prev = 75;
-          _context.prev = 76;
+        case 73:
+          _context.prev = 73;
+          _context.prev = 74;
 
           if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
             _iterator4["return"]();
           }
 
-        case 78:
-          _context.prev = 78;
+        case 76:
+          _context.prev = 76;
 
           if (!_didIteratorError4) {
-            _context.next = 81;
+            _context.next = 79;
             break;
           }
 
           throw _iteratorError4;
 
+        case 79:
+          return _context.finish(76);
+
+        case 80:
+          return _context.finish(73);
+
         case 81:
-          return _context.finish(78);
-
-        case 82:
-          return _context.finish(75);
-
-        case 83:
           _iteratorNormalCompletion3 = true;
-          _context.next = 61;
+          _context.next = 59;
+          break;
+
+        case 84:
+          _context.next = 90;
           break;
 
         case 86:
-          _context.next = 92;
-          break;
-
-        case 88:
-          _context.prev = 88;
-          _context.t3 = _context["catch"](59);
+          _context.prev = 86;
+          _context.t3 = _context["catch"](57);
           _didIteratorError3 = true;
           _iteratorError3 = _context.t3;
 
-        case 92:
-          _context.prev = 92;
-          _context.prev = 93;
+        case 90:
+          _context.prev = 90;
+          _context.prev = 91;
 
           if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
             _iterator3["return"]();
           }
 
-        case 95:
-          _context.prev = 95;
+        case 93:
+          _context.prev = 93;
 
           if (!_didIteratorError3) {
-            _context.next = 98;
+            _context.next = 96;
             break;
           }
 
           throw _iteratorError3;
 
+        case 96:
+          return _context.finish(93);
+
+        case 97:
+          return _context.finish(90);
+
         case 98:
-          return _context.finish(95);
-
-        case 99:
-          return _context.finish(92);
-
-        case 100:
           console.log("Running scripts: ");
           console.log(scripts);
           runCommands(scripts, dependenciesLength, function () {});
 
-        case 103:
+        case 101:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[6, 10, 14, 22], [15,, 17, 21], [39, 43, 47, 55], [48,, 50, 54], [59, 88, 92, 100], [67, 71, 75, 83], [76,, 78, 82], [93,, 95, 99]]);
+  }, null, null, [[6, 10, 14, 22], [15,, 17, 21], [37, 41, 45, 53], [46,, 48, 52], [57, 86, 90, 98], [65, 69, 73, 81], [74,, 76, 80], [91,, 93, 97]]);
 }
 
 deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS, doNotPrintProtocols);
