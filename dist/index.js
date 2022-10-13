@@ -3015,8 +3015,11 @@ async function deploySubgraphs(
   if (deployAny === 1) {
     scripts.push("npm install -g @graphprotocol/graph-cli");
     scripts.push("npm install --dev @graphprotocol/graph-ts");
+    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install -g ./`);
+    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install`);
     scripts.push("npm install mustache");
     scripts.push("npm install minimist");
+    scripts.push("npm install -g ./")
     const dependenciesLength = scripts.length;
 
     let directoriesNotSpecified = [];
