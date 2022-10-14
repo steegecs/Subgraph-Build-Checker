@@ -3015,8 +3015,10 @@ async function deploySubgraphs(
   if (deployAny === 1) {
     scripts.push("npm install -g @graphprotocol/graph-cli");
     scripts.push("npm install --dev @graphprotocol/graph-ts");
+    scripts.push(`npm install -g ${ABSOLUTE_PATH}/messari-cli`);
+    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install`);
     scripts.push("npm install mustache");
-    scripts.push("npm install minimist");
+
     const dependenciesLength = scripts.length;
 
     let directoriesNotSpecified = [];
@@ -3039,13 +3041,13 @@ async function deploySubgraphs(
         const path = `${ABSOLUTE_PATH}/subgraphs/${directory}`;
         if (doNotPrintProtocols.has(protocol)) {
           scripts.push(
-            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=false`
+            `messari build ${protocol}`
           );
         } else {
           scripts.push(
-            `npm --prefix ${path} run -s build --ID=${protocol} --SPAN=protocol --DEPLOY=false --PRINTLOGS=true`
+            `messari build ${protocol} -l`
           );
-          }
+        }
       }
     }
 
