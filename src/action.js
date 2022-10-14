@@ -100,15 +100,15 @@ async function deploySubgraphs(
       protocols = Array.from(deployProtocol.get(directory));
       for (const protocol of protocols) {
         const path = `${ABSOLUTE_PATH}/subgraphs/${directory}`;
-        if (doNotPrintProtocols.has(protocol)) {
-          scripts.push(
-            `messari build ${protocol}`
-          );
-        } else {
-          scripts.push(
-            `messari build ${protocol} -l`
-          );
-        }
+        // if (doNotPrintProtocols.has(protocol)) {
+        //   scripts.push(
+        //     `messari build ${protocol}`
+        //   );
+        // } else {
+        //   scripts.push(
+        //     `messari build ${protocol} -l`
+        //   );
+        // }
       }
     }
 
