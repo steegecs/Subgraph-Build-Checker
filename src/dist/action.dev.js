@@ -209,15 +209,13 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
 
           for (_iterator4 = protocols[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             protocol = _step4.value;
-            path = "".concat(ABSOLUTE_PATH, "/subgraphs/").concat(directory); // if (doNotPrintProtocols.has(protocol)) {
-            //   scripts.push(
-            //     `messari build ${protocol}`
-            //   );
-            // } else {
-            //   scripts.push(
-            //     `messari build ${protocol} -l`
-            //   );
-            // }
+            path = "".concat(ABSOLUTE_PATH, "/subgraphs/").concat(directory);
+
+            if (doNotPrintProtocols.has(protocol)) {
+              scripts.push("messari build ".concat(protocol));
+            } else {
+              scripts.push("messari build ".concat(protocol, " -l"));
+            }
           }
 
           _context.next = 73;
