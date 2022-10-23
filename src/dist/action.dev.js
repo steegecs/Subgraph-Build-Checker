@@ -136,7 +136,7 @@ function deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS
           scripts.push("npm install --dev @graphprotocol/graph-ts");
           scripts.push("npm install -g ".concat(ABSOLUTE_PATH, "/messari-cli"));
           scripts.push("npm --prefix ".concat(ABSOLUTE_PATH, "/messari-cli install"));
-          scripts.push("npm install mustache@4.2.0");
+          scripts.push("npm install -g mustache@4.2.0");
           dependenciesLength = scripts.length;
           directoriesNotSpecified = [];
           directories = [];
