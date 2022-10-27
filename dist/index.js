@@ -2780,6 +2780,14 @@ async function runCommands(array, dependenciesLength, callback) {
 
 /***/ }),
 
+/***/ 923:
+/***/ ((module) => {
+
+module.exports = eval("require")("deployment/deployment.json");
+
+
+/***/ }),
+
 /***/ 491:
 /***/ ((module) => {
 
@@ -2943,8 +2951,9 @@ const { runCommands } = __nccwpck_require__(358);
 
 const CHANGED_FILES = core.getInput("CHANGED_FILES").split(" ");
 const ABSOLUTE_PATH = core.getInput("ABSOLUTE_PATH");
+process.chdir(ABSOLUTE_PATH);
 
-const DEPLOYMENT_CONFIGURATIONS_JSON = require(`${ABSOLUTE_PATH}/deployment/deployment.json`);
+const DEPLOYMENT_CONFIGURATIONS_JSON = __nccwpck_require__(923);
 const DEPLOYMENT_CONFIGURATIONS = JSON.parse(
   JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON)
 );
@@ -2953,7 +2962,6 @@ const doNotPrintProtocols = new Set(['beefy-finance'])
 
 async function deploySubgraphs(
   CHANGED_FILES,
-  ABSOLUTE_PATH,
   DEPLOYMENT_CONFIGURATIONS,
   doNotPrintProtocols
 ) {
@@ -3015,8 +3023,7 @@ async function deploySubgraphs(
   if (deployAny === 1) {
     scripts.push("npm install -g @graphprotocol/graph-cli");
     scripts.push("npm install --dev @graphprotocol/graph-ts");
-    scripts.push(`npm install -g ${ABSOLUTE_PATH}/messari-cli`);
-    scripts.push(`npm --prefix ${ABSOLUTE_PATH}/messari-cli install`);
+    scripts.push(`npm install -g messari-subgraph-cli`);
     scripts.push("npm install -g mustache@4.2.0");
 
     const dependenciesLength = scripts.length;
@@ -3038,7 +3045,6 @@ async function deploySubgraphs(
     for (const directory of directories) {
       protocols = Array.from(deployProtocol.get(directory));
       for (const protocol of protocols) {
-        const path = `${ABSOLUTE_PATH}/subgraphs/${directory}`;
         if (doNotPrintProtocols.has(protocol)) {
           scripts.push(
             `messari build ${protocol}`
@@ -3057,7 +3063,7 @@ async function deploySubgraphs(
   }
 }
 
-deploySubgraphs(CHANGED_FILES, ABSOLUTE_PATH, DEPLOYMENT_CONFIGURATIONS, doNotPrintProtocols);
+deploySubgraphs(CHANGED_FILES, DEPLOYMENT_CONFIGURATIONS, doNotPrintProtocols);
 
 })();
 
