@@ -6,7 +6,7 @@ const CHANGED_FILES = core.getInput("CHANGED_FILES").split(" ");
 const ABSOLUTE_PATH = core.getInput("ABSOLUTE_PATH");
 process.chdir(ABSOLUTE_PATH);
 
-const DEPLOYMENT_CONFIGURATIONS_JSON = require(`deployment/deployment.json`);
+const DEPLOYMENT_CONFIGURATIONS_JSON = require(`${ABSOLUTE_PATH}/deployment/deployment.json`);
 const DEPLOYMENT_CONFIGURATIONS = JSON.parse(
   JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON)
 );

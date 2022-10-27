@@ -2780,14 +2780,6 @@ async function runCommands(array, dependenciesLength, callback) {
 
 /***/ }),
 
-/***/ 923:
-/***/ ((module) => {
-
-module.exports = eval("require")("deployment/deployment.json");
-
-
-/***/ }),
-
 /***/ 491:
 /***/ ((module) => {
 
@@ -2953,7 +2945,7 @@ const CHANGED_FILES = core.getInput("CHANGED_FILES").split(" ");
 const ABSOLUTE_PATH = core.getInput("ABSOLUTE_PATH");
 process.chdir(ABSOLUTE_PATH);
 
-const DEPLOYMENT_CONFIGURATIONS_JSON = __nccwpck_require__(923);
+const DEPLOYMENT_CONFIGURATIONS_JSON = require(`${ABSOLUTE_PATH}/deployment/deployment.json`);
 const DEPLOYMENT_CONFIGURATIONS = JSON.parse(
   JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON)
 );

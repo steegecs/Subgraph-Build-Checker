@@ -19,7 +19,7 @@ var CHANGED_FILES = core.getInput("CHANGED_FILES").split(" ");
 var ABSOLUTE_PATH = core.getInput("ABSOLUTE_PATH");
 process.chdir(ABSOLUTE_PATH);
 
-var DEPLOYMENT_CONFIGURATIONS_JSON = require("deployment/deployment.json");
+var DEPLOYMENT_CONFIGURATIONS_JSON = require("".concat(ABSOLUTE_PATH, "/deployment/deployment.json"));
 
 var DEPLOYMENT_CONFIGURATIONS = JSON.parse(JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON));
 var doNotPrintProtocols = new Set(['beefy-finance']);
