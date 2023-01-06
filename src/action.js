@@ -76,9 +76,9 @@ async function deploySubgraphs(
   if (deployAny === 1) {
     scripts.push("npm install -g @graphprotocol/graph-cli");
     scripts.push("npm install --dev @graphprotocol/graph-ts");
-    scripts.push(`npm install -g messari-subgraph-cli`);
+    scripts.push("npm install -g messari-subgraph-cli");
     scripts.push("npm install -g mustache@4.2.0");
-    scripts.push("npm install");
+    scripts.push("npm install -g as-proto@0.2.3");
 
     const dependenciesLength = scripts.length;
 

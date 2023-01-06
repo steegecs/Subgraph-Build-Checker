@@ -137,7 +137,7 @@ function deploySubgraphs(CHANGED_FILES, DEPLOYMENT_CONFIGURATIONS, doNotPrintPro
           scripts.push("npm install --dev @graphprotocol/graph-ts");
           scripts.push("npm install -g messari-subgraph-cli");
           scripts.push("npm install -g mustache@4.2.0");
-          scripts.push("npm install");
+          scripts.push("npm install -g as-proto@0.2.3");
           dependenciesLength = scripts.length;
           directoriesNotSpecified = [];
           directories = [];
