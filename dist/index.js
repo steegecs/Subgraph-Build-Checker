@@ -2950,6 +2950,8 @@ const DEPLOYMENT_CONFIGURATIONS = JSON.parse(
   JSON.stringify(DEPLOYMENT_CONFIGURATIONS_JSON)
 );
 
+process.env.NODE_OPTIONS = "--max-old-space-size=8192";
+
 const doNotPrintProtocols = new Set(['beefy-finance'])
 
 async function deploySubgraphs(
@@ -3018,7 +3020,6 @@ async function deploySubgraphs(
     scripts.push("npm install -g messari-subgraph-cli");
     scripts.push("npm install -g mustache@4.2.0");
     scripts.push("npm install -g as-proto@0.2.3");
-    scripts.push("export NODE_OPTIONS='--max-old-space-size=8192'");
 
     const dependenciesLength = scripts.length;
 
